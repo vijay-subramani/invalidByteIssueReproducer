@@ -20,13 +20,49 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>amzn-$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+				<string>juspay-$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+				<string>$(PRODUCT_BUNDLE_IDENTIFIER).cred</string>
+				<string>paytm-$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>credpay</string>
+		<string>phonepe</string>
+		<string>paytmmp</string>
+		<string>tez</string>
+		<string>paytm</string>
+		<string>bhim</string>
+		<string>myairtel</string>
+		<string>slice-upi</string>
+		<string>ppe</string>
+		<string>amazonpay</string>
+		<string>kiwi</string>
+		<string>navipay</string>
+		<string>mobikwik</string>
+		<string>tatadigital</string>
+		<string>popclubapp</string>
+		<string>super</string>
+		<string>postpe</string>
+		<string>jupiter</string>
+		<string>cugext</string>
+		<string>devtools</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
-	  <!-- Do not change NSAllowsArbitraryLoads to true, or you will risk app rejection! -->
 		<key>NSAllowsArbitraryLoads</key>
 		<false/>
 		<key>NSAllowsLocalNetworking</key>
@@ -34,6 +70,8 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
+	<key>RCTNewArchEnabled</key>
+	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>

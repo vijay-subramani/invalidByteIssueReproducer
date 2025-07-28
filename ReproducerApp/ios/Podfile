@@ -1,4 +1,5 @@
 # Resolve react_native_pods.rb with node to allow for hoisting
+ENV['RCT_NEW_ARCH_ENABLED'] = '1'
 require Pod::Executable.execute_command('node', ['-p',
   'require.resolve(
     "react-native/scripts/react_native_pods.rb",
@@ -6,12 +7,61 @@ require Pod::Executable.execute_command('node', ['-p',
   )', __dir__]).strip
 
 platform :ios, min_ios_version_supported
+use_modular_headers!
 prepare_react_native_project!
 
 linkage = ENV['USE_FRAMEWORKS']
 if linkage != nil
   Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
   use_frameworks! :linkage => linkage.to_sym
+end
+
+def myPods
+  pod 'Adjust', '~> 5.1.1'
+  pod 'AlignedCollectionViewFlowLayout'
+  pod 'Blitzllama-ios', '1.6.16'
+  pod 'BranchSDK', '3.12.1'
+  pod 'Cosmos', '25.0.1'
+  pod 'CriteoEventsSDK', '1.1.4'
+  pod 'CWPopup', '1.2.6'
+  pod 'EasyTipView', '2.1'
+  pod 'FBSDKLoginKit', '17.0.1'
+  pod 'Firebase/Analytics', '10.24.0'
+  pod 'Firebase/Crashlytics', '10.24.0'
+  pod 'Firebase/Performance', '10.24.0'
+  pod 'FreshchatSDK', '6.4.0'
+  pod 'GoogleAnalytics', '3.23.0'
+  pod 'GoogleAppIndexing', '2.0.3'
+  pod 'GoogleSignIn', '7.1.0'
+  pod 'HyperSDK', '2.2.1.11'
+  pod 'iCarousel', '1.8.3'
+  pod 'IDMPhotoBrowser', '1.10.2'
+  pod 'IQKeyboardManagerSwift', '7.0.3'
+  pod 'JTAppleCalendar', '8.0.5'
+  pod 'Kingfisher', '~> 8.0'
+  pod 'lottie-ios', '4.4.3'
+  pod 'Mixpanel-swift', '4.2.5'
+  pod 'PayUIndia-Custom-Browser', '10.2.0'
+  pod 'PayUIndia-UPICore', '9.2.0'
+  pod 'SDWebImage', '5.19.1'
+  pod 'Siren', '6.1.2'
+  pod 'SmartPush-iOS-SDK', '1.0.0'
+  pod 'Smartech-iOS-SDK', '3.2.7'
+  pod 'SVProgressHUD', '2.3.1'
+  pod 'TargetActClient', :git => 'https://gitlab.com/gamooga-ios/TargetActClientFramework.git', :branch => 'ios18upgrade'
+  pod 'TrueSDK', '0.1.8'
+  pod 'TrustKit', '3.0.4'
+end
+
+def appClipPods
+  pod 'Alamofire', '5.9.1'
+  pod 'MoEngage-iOS-SDK', '9.22.2'
+  pod 'MoEngage-iOS-SDK/InApps'
+  pod 'Rudder-Moengage', :git => 'https://github.com/rudderlabs/rudder-integration-moengage-ios.git', :tag => 'v2.3.0'
+  pod 'SDWebImage', '5.19.1'
+  pod 'SwiftyJSON', '5.0.2'
+  pod 'TensorFlowLiteTaskVision', '0.4.3'
+  $MoengageSDKVersion = '9.22.2'
 end
 
 target 'ReproducerApp' do
@@ -22,14 +72,51 @@ target 'ReproducerApp' do
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
+  myPods
+  appClipPods
+end
 
-  post_install do |installer|
-    # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
-    react_native_post_install(
-      installer,
-      config[:reactNativePath],
-      :mac_catalyst_enabled => false,
-      # :ccache_enabled => true
-    )
+post_install do |installer|
+  # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
+  react_native_post_install(
+    installer,
+    use_native_modules![:reactNativePath],
+    :mac_catalyst_enabled => false,
+    # :ccache_enabled => true
+  )
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings.delete 'IPHONEOS_DEPLOYMENT_TARGET'
+    end
   end
+
+  fuse_path = "./Pods/HyperSDK/Fuse.rb"
+  clean_assets = false # Pass true to re-download all the assets
+  if File.exist?(fuse_path)
+    if system("ruby", fuse_path.to_s, clean_assets.to_s)
+    end
+  end
+
+  bitcode_strip_path = `xcrun --find bitcode_strip`.chop!
+
+  def strip_bitcode_from_framework(bitcode_strip_path, framework_relative_path)
+     framework_path = File.join(Dir.pwd, framework_relative_path)
+     command = "#{bitcode_strip_path} #{framework_path} -r -o #{framework_path}"
+     puts "Stripping bitcode: #{command}"
+     system(command)
+  end
+
+  framework_paths = [
+         "Pods/TargetActClient/TargetActClient.framework/TargetActClient",
+         "Pods/PayUIndia-NetworkReachability/PayUNetworkReachability.xcframework/ios-arm64_armv7/PayUNetworkReachability.framework/PayUNetworkReachability",
+         "Pods/PayUIndia-Analytics/PayUAnalytics.xcframework/ios-arm64/PayUAnalytics.framework/PayUAnalytics",
+         "Pods/PayUIndia-Logger/Dependencies/PayULoggerKit.xcframework/ios-arm64_armv7/PayULoggerKit.framework/PayULoggerKit",
+         "Pods/SmartPush-iOS-SDK/Frameworks/SmartPush/SmartPush.framework/SmartPush",
+         "Pods/Smartech-iOS-SDK/Frameworks/Smartech/Smartech.framework/Smartech",
+  ]
+
+  framework_paths.each do |framework_relative_path|
+     strip_bitcode_from_framework(bitcode_strip_path, framework_relative_path)
+  end
+
 end
