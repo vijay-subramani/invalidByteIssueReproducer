@@ -15,8 +15,6 @@ PODS:
   - Blitzllama-ios (1.6.16)
   - boost (1.84.0)
   - BranchSDK (3.12.1)
-  - CLiOSFramework (0.1.83):
-    - SDWebImage (= 5.19.1)
   - Cosmos (25.0.1)
   - CriteoEventsSDK (1.1.4)
   - CWPopup (1.2.6)
@@ -2416,7 +2414,6 @@ DEPENDENCIES:
   - Blitzllama-ios (= 1.6.16)
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - BranchSDK (= 3.12.1)
-  - CLiOSFramework (from `https://git-codecommit.ap-south-1.amazonaws.com/v1/repos/iOS_Frameworks`, branch `develop`)
   - Cosmos (= 25.0.1)
   - CriteoEventsSDK (= 1.1.4)
   - CWPopup (= 1.2.6)
@@ -2615,9 +2612,6 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   boost:
     :podspec: "../node_modules/react-native/third-party-podspecs/boost.podspec"
-  CLiOSFramework:
-    :branch: develop
-    :git: https://git-codecommit.ap-south-1.amazonaws.com/v1/repos/iOS_Frameworks
   DoubleConversion:
     :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
   fast_float:
@@ -2769,9 +2763,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 CHECKOUT OPTIONS:
-  CLiOSFramework:
-    :commit: f2152057fabd7699fe0caa2e99cb609cc07f8860
-    :git: https://git-codecommit.ap-south-1.amazonaws.com/v1/repos/iOS_Frameworks
   Rudder-Moengage:
     :git: https://github.com/rudderlabs/rudder-integration-moengage-ios.git
     :tag: v2.3.0
@@ -2788,7 +2779,6 @@ SPEC CHECKSUMS:
   Blitzllama-ios: 9a63787133bfcdcf568ebf8e04f59138fb8d36a8
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
   BranchSDK: 7135af6602a105fa6be3ad6c606a7f78b0131b5d
-  CLiOSFramework: 9dd40fee1c71e99eaf08b6650269f29d55ff41f4
   Cosmos: 02db0a1c953107049bfd2d7af19ceef55ecb7e98
   CriteoEventsSDK: 3e35256a36366cd1e759d03cc0ed7ac5d9e4ab9f
   CWPopup: 3f8b0704a9914813d90372d66525d31f24b27d49
@@ -2939,6 +2929,6 @@ SPEC CHECKSUMS:
   TrustKit: 403e8d2cfbff2abfc37cd41acc558dab8ec78e59
   Yoga: a742cc68e8366fcfc681808162492bc0aa7a9498
 
-PODFILE CHECKSUM: 4a79ad6048ed0145aa961bd75bdebaf3578e06f2
+PODFILE CHECKSUM: 881db5cda893a0c74c36be4eb2cd9af51bb57bb2
 
 COCOAPODS: 1.16.2
